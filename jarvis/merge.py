@@ -36,6 +36,9 @@ class Libro:
     fuentes_ok: list[str] = field(default_factory=list)
     errores: list[str] = field(default_factory=list)
     duplicados: int = 0
+    # Metricas de opciones binarias, si el libro las trae. Lo rellena quien
+    # analiza, no la fusion: aqui solo se reserva el hueco.
+    binarias: object = None
 
     @property
     def hay_datos(self) -> bool:

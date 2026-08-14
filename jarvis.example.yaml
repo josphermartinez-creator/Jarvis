@@ -9,28 +9,41 @@
 # fusionan en un unico libro de operaciones, quitando los duplicados.
 
 capital_inicial: 1000        # para el drawdown y la rentabilidad en %
-moneda: USDT
+moneda: USD
 zona_horaria: UTC
 
 
 fuentes:
 
-  # --- 1. El archivo que escribe tu bot --------------------------------
+  # --- 0. Opciones binarias: BOT JPH TRADING / IQ Option ---------------
+  # Lee 'datos/historial_operaciones.csv', el registro permanente que el bot
+  # escribe al cerrar cada operacion. Si omites 'ruta', Jarvis lo busca en las
+  # ubicaciones habituales.
+  bot_binarias:
+    tipo: iqoption
+    ruta: ~/BotIFCAuto/datos/historial_operaciones.csv
+
+    # Por defecto se excluyen las operaciones marcadas 'desconocido' (el bot
+    # las ejecuto pero la API nunca confirmo el resultado). Incluirlas
+    # falsearia la efectividad. Para verlas de todas formas:
+    # incluir: [win, loss, empate, desconocido]
+
+  # --- 1. El archivo que escribe cualquier otro bot --------------------
   # Lo mas comun. Jarvis detecta las columnas solo: acepta nombres en
   # espanol o ingles y fechas en cualquier formato habitual.
   # Comprueba antes que tu archivo sirve:  jarvis inspeccionar ops.csv
-  mi_bot:
-    tipo: archivo
-    ruta: ~/mi-bot/operaciones.csv
+  # mi_bot:
+  #   tipo: archivo
+  #   ruta: ~/mi-bot/operaciones.csv
 
-    # Solo si la deteccion automatica no acierta con alguna columna:
-    # columnas:
-    #   ts: momento_ejecucion
-    #   symbol: par
-    #   side: operacion
-    #   qty: volumen
-    #   price: precio_medio
-    #   fee: coste
+  #   # Solo si la deteccion automatica no acierta con alguna columna:
+  #   columnas:
+  #     ts: momento_ejecucion
+  #     symbol: par
+  #     side: operacion
+  #     qty: volumen
+  #     price: precio_medio
+  #     fee: coste
 
   # Varios archivos de golpe (un log por mes, por ejemplo):
   # historico:

@@ -16,7 +16,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from . import __version__
+from . import __version__, binarias
 from .config import PLANTILLA, Config, buscar_config, cargar
 from .merge import fusionar
 from .metrics import (
@@ -64,10 +64,20 @@ def _config_para(args) -> Config:
 
 
 def _analizar(config: Config, periodo: str):
+    """Lee, fusiona y calcula. Devuelve (metricas, operaciones, libro).
+
+    Si el libro trae opciones binarias, ``libro.binarias`` lleva ademas sus
+    metricas propias y sus avisos se suman a los de las fuentes.
+    """
     fuentes = [crear_fuente(n, c) for n, c in config.fuentes.items()]
     desde, hasta = rango_periodo(periodo)
     libro = fusionar(fuentes, desde, hasta)
     trades = filtrar_periodo(libro.trades, desde, hasta)
+
+    libro.binarias = binarias.calcular(trades)
+    if libro.binarias.hay_datos:
+        libro.errores.extend(binarias.avisos(libro.binarias))
+
     return calcular(trades, config.capital_inicial), trades, libro
 
 
@@ -93,6 +103,7 @@ def cmd_reporte(args) -> int:
                 abiertas=libro.abiertas,
                 avisos=libro.errores,
                 fuentes=libro.fuentes_ok,
+                binarias=libro.binarias,
             ),
             encoding="utf-8",
         )
@@ -110,6 +121,7 @@ def cmd_reporte(args) -> int:
             avisos=libro.errores,
             color=color,
             detalle=not args.breve,
+            binarias=libro.binarias,
         ))
 
         if args.comparar:
@@ -174,7 +186,12 @@ def cmd_telegram(args) -> int:
     chat_id = args.chat_id or config.telegram.get("chat_id", "")
 
     metricas, trades, libro = _analizar(config, args.periodo)
-    texto = tg.resumen(metricas, moneda=config.moneda, periodo=args.periodo)
+    if libro.binarias is not None and libro.binarias.hay_datos:
+        texto = tg.resumen_binarias(
+            libro.binarias, moneda=config.moneda, periodo=args.periodo
+        )
+    else:
+        texto = tg.resumen(metricas, moneda=config.moneda, periodo=args.periodo)
 
     adjunto = None
     if args.adjuntar:
@@ -192,6 +209,7 @@ def cmd_telegram(args) -> int:
                 abiertas=libro.abiertas,
                 avisos=libro.errores,
                 fuentes=libro.fuentes_ok,
+                binarias=libro.binarias,
             ),
             encoding="utf-8",
         )

@@ -15,10 +15,10 @@ from __future__ import annotations
 import threading
 import time
 import webbrowser
-from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
+from . import binarias
 from .config import Config
 from .merge import fusionar
 from .metrics import calcular, filtrar_periodo, rango_periodo
@@ -59,6 +59,11 @@ def _construir_pagina(config: Config, periodo: str, refresco: int) -> str:
     trades = filtrar_periodo(libro.trades, desde, hasta)
     metricas = calcular(trades, config.capital_inicial)
 
+    metricas_binarias = binarias.calcular(trades)
+    avisos = list(libro.errores)
+    if metricas_binarias.hay_datos:
+        avisos.extend(binarias.avisos(metricas_binarias))
+
     return reporte_html.render(
         metricas,
         trades=trades,
@@ -66,9 +71,10 @@ def _construir_pagina(config: Config, periodo: str, refresco: int) -> str:
         titulo="Dashboard",
         periodo=periodo,
         abiertas=libro.abiertas,
-        avisos=libro.errores,
+        avisos=avisos,
         fuentes=libro.fuentes_ok,
         autorecarga=refresco,
+        binarias=metricas_binarias,
     )
 
 

@@ -8,64 +8,36 @@ un archivo o mandarlo por correo).
 from __future__ import annotations
 
 import math
-import os
-import sys
 from datetime import datetime
 
 from ..matching import PosicionAbierta
 from ..metrics import Metricas
 from .formato import (
     ANCHO,
+    Color,
+    Pintor,
     barra,
-    duracion,
+    color_activo,
     dinero,
+    duracion,
     esparkline,
     pct,
-    sin_color,
 )
+from .formato import linea as _linea
 
 DIAS = ("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo")
 
 
-class Color:
-    VERDE = "\033[32m"
-    ROJO = "\033[31m"
-    AMARILLO = "\033[33m"
-    GRIS = "\033[90m"
-    NEGRITA = "\033[1m"
-    FIN = "\033[0m"
+def _envolver(texto: str, c: Pintor, color: str, sangria: str = "  ") -> list[str]:
+    """Parte un aviso largo en varias lineas para que quepa en la terminal."""
+    import textwrap
 
-
-def _color_activo(forzar: bool | None = None) -> bool:
-    if forzar is not None:
-        return forzar
-    if os.environ.get("NO_COLOR"):
-        return False
-    return sys.stdout.isatty()
-
-
-class Pintor:
-    """Aplica color solo si la terminal lo admite."""
-
-    def __init__(self, activo: bool):
-        self.activo = activo
-
-    def __call__(self, texto: str, color: str) -> str:
-        return f"{color}{texto}{Color.FIN}" if self.activo else texto
-
-    def segun_signo(self, texto: str, valor: float) -> str:
-        if valor > 0:
-            return self(texto, Color.VERDE)
-        if valor < 0:
-            return self(texto, Color.ROJO)
-        return self(texto, Color.GRIS)
-
-
-def _linea(izq: str, der: str, ancho: int = ANCHO) -> str:
-    """Une etiqueta y valor separados por puntos, ignorando codigos de color."""
-    visible = len(sin_color(izq)) + len(sin_color(der))
-    relleno = max(1, ancho - visible - 2)
-    return f"{izq} {'.' * relleno} {der}"
+    lineas = textwrap.wrap(texto, width=ANCHO - len(sangria)) or [texto]
+    continuacion = sangria + "  "
+    return [
+        c(f"{sangria if i == 0 else continuacion}{linea}", color)
+        for i, linea in enumerate(lineas)
+    ]
 
 
 def render(
@@ -77,9 +49,15 @@ def render(
     avisos: list[str] | None = None,
     color: bool | None = None,
     detalle: bool = True,
+    binarias: "MetricasBinarias | None" = None,
 ) -> str:
-    """Genera el reporte completo como texto listo para imprimir."""
-    c = Pintor(_color_activo(color))
+    """Genera el reporte completo como texto listo para imprimir.
+
+    Si ``binarias`` trae metricas de opciones binarias, se muestran esas en vez
+    del bloque de spot: en binarias no hay precio de entrada y salida, asi que
+    profit factor o duracion media no significan nada.
+    """
+    c = Pintor(color_activo(color))
     out: list[str] = []
     sep = "─" * ANCHO
 
@@ -111,6 +89,19 @@ def render(
     if m.equity:
         out.append("  " + c(esparkline([p.equity for p in m.equity]), Color.GRIS))
     out.append("")
+
+    if binarias is not None and binarias.hay_datos:
+        from .binarias_consola import render as render_binarias
+
+        out.extend(render_binarias(binarias, moneda, c))
+        if avisos:
+            out.append(c("  AVISOS", Color.NEGRITA))
+            out.append(c("  " + sep[:ANCHO - 2], Color.GRIS))
+            for aviso in avisos:
+                out.extend(_envolver(f"! {aviso}", c, Color.AMARILLO))
+            out.append("")
+        out.append(c(f"  Generado {datetime.now():%d/%m/%Y %H:%M}", Color.GRIS))
+        return "\n".join(out)
 
     out.append(_linea("  Operaciones", str(m.operaciones)))
     out.append(_linea(
@@ -179,7 +170,7 @@ def render(
         out.append(c("  AVISOS", Color.NEGRITA))
         out.append(c("  " + sep[:ANCHO - 2], Color.GRIS))
         for aviso in avisos:
-            out.append(c(f"  ! {aviso}", Color.AMARILLO))
+            out.extend(_envolver(f"! {aviso}", c, Color.AMARILLO))
         out.append("")
 
     out.append(c(f"  Generado {datetime.now():%d/%m/%Y %H:%M}", Color.GRIS))

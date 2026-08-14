@@ -23,28 +23,34 @@ PLANTILLA = """\
 # se leen todos y se fusionan en un unico libro de operaciones.
 
 capital_inicial: 1000        # para calcular drawdown y rentabilidad en %
-moneda: USDT
+moneda: USD
 zona_horaria: UTC
 
 fuentes:
 
-  # 1) El log que escribe tu bot. Jarvis detecta las columnas solo.
-  mi_bot:
-    tipo: archivo
-    ruta: ~/mi-bot/operaciones.csv
+  # 1) Opciones binarias (BOT JPH TRADING / IQ Option).
+  #    Si omites 'ruta', Jarvis busca el historial en las rutas habituales.
+  bot_binarias:
+    tipo: iqoption
+    ruta: ~/BotIFCAuto/datos/historial_operaciones.csv
 
-  # 2) Varios archivos a la vez (admite comodines).
+  # 2) El log de cualquier otro bot. Jarvis detecta las columnas solo.
+  # mi_bot:
+  #   tipo: archivo
+  #   ruta: ~/mi-bot/operaciones.csv
+
+  # 3) Varios archivos a la vez (admite comodines).
   # historico:
   #   tipo: archivo
   #   ruta: ~/mi-bot/logs/*.csv
 
-  # 3) La base de datos del bot.
+  # 4) La base de datos del bot.
   # base:
   #   tipo: sqlite
   #   ruta: ~/mi-bot/bot.db
   #   tabla: trades
 
-  # 4) El exchange, como fuente de verdad. Usa claves de SOLO LECTURA.
+  # 5) Un exchange, como fuente de verdad. Usa claves de SOLO LECTURA.
   # binance:
   #   tipo: binance
   #   api_key: ${BINANCE_API_KEY}

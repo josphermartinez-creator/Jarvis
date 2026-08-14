@@ -139,9 +139,13 @@ tbody tr:last-child td { border-bottom: none; }
 
 .aviso {
   background: var(--rojo-claro); border: 1px solid var(--rojo);
-  border-radius: 8px; padding: 11px 14px; margin-bottom: 14px;
-  font-size: 13px; color: var(--rojo);
+  border-radius: 10px; padding: 13px 16px; margin-bottom: 16px;
+  font-size: 13px; color: var(--rojo); line-height: 1.5;
 }
+.aviso-titulo { font-weight: 620; margin-bottom: 6px; }
+.aviso ul { margin: 0; padding-left: 20px; }
+.aviso li { margin-bottom: 4px; }
+.aviso li:last-child { margin-bottom: 0; }
 .vacio { color: var(--suave); text-align: center; padding: 36px 0; }
 footer {
   margin-top: 26px; color: var(--tenue); font-size: 12px; text-align: center;
@@ -473,6 +477,82 @@ def _seccion_dia_semana(bloques: list[Bloque], moneda: str) -> str:
     )
 
 
+def _panel_avisos(avisos: list[str]) -> str:
+    """Todos los avisos en un solo bloque.
+
+    Uno por caja llenaba la parte de arriba de banderas rojas y acababa
+    pareciendo decoracion; agrupados se leen.
+    """
+    if len(avisos) == 1:
+        return f'<div class="aviso">{_e(avisos[0])}</div>'
+
+    puntos = "".join(f"<li>{_e(a)}</li>" for a in avisos)
+    return (
+        f'<div class="aviso">'
+        f'<div class="aviso-titulo">{len(avisos)} cosas que conviene mirar</div>'
+        f"<ul>{puntos}</ul></div>"
+    )
+
+
+def _css_binarias() -> str:
+    """Estilos extra que solo hacen falta en el dashboard de binarias."""
+    from .binarias_html import CSS_EXTRA
+
+    return CSS_EXTRA
+
+
+def _cuerpo_binarias(b, trades: list[Trade], moneda: str) -> list[str]:
+    """Paneles del dashboard cuando el historial es de opciones binarias."""
+    from . import binarias_html as bh
+
+    signo = "+" if b.neto >= 0 else ""
+    partes = [
+        f'<div class="resultado">'
+        f'<div class="etiqueta">Resultado neto</div>'
+        f'<div class="cifra {_clase(b.neto)}">{signo}{dinero(b.neto)} {_e(moneda)}</div>'
+        f'<div class="subtitulo">{b.total} operaciones · '
+        f"{dinero(b.invertido)} {_e(moneda)} invertidos · "
+        f"balance {dinero(b.balance_inicial)} → {dinero(b.balance_final)}</div></div>",
+        bh.panel_veredicto(b),
+        f'<div class="panel"><h2>Efectividad frente al punto de equilibrio</h2>'
+        f"{bh.medidor_equilibrio(b)}</div>",
+        f'<div class="rejilla">{bh.tarjetas(b, moneda)}</div>',
+        f'<div class="panel"><h2>Balance</h2>{bh.curva_balance(b, moneda)}</div>',
+    ]
+
+    if len(b.por_par) > 1:
+        partes.append(
+            f'<div class="panel"><h2>Por par</h2>'
+            f"{bh.tabla_bloques(b.por_par, moneda, 'Par')}</div>"
+        )
+    if len(b.por_estrategia) > 1:
+        partes.append(
+            f'<div class="panel"><h2>Por estrategia</h2>'
+            f"{bh.tabla_bloques(b.por_estrategia, moneda, 'Estrategia')}</div>"
+        )
+    if len(b.profundidad) > 1:
+        partes.append(
+            f'<div class="panel"><h2>Segun perdidas seguidas previas</h2>'
+            f"{bh.tabla_profundidad(b.profundidad, moneda)}</div>"
+        )
+    if len(b.por_franja) > 2:
+        partes.append(
+            f'<div class="panel"><h2>Resultado por franja horaria</h2>'
+            f"{bh.barras_franja(b.por_franja, moneda)}</div>"
+        )
+    if len(b.por_dia_semana) > 1:
+        partes.append(
+            f'<div class="panel"><h2>Por dia de la semana</h2>'
+            f"{bh.tabla_bloques(b.por_dia_semana, moneda, 'Dia')}</div>"
+        )
+
+    partes.append(
+        f'<div class="panel"><h2>Operaciones</h2>'
+        f"{bh.tabla_operaciones(trades, moneda)}</div>"
+    )
+    return partes
+
+
 # -- documento ------------------------------------------------------------
 
 def render(
@@ -485,11 +565,17 @@ def render(
     avisos: list[str] | None = None,
     fuentes: list[str] | None = None,
     autorecarga: int = 0,
+    binarias=None,
 ) -> str:
-    """Genera el dashboard completo como un unico documento HTML."""
+    """Genera el dashboard completo como un unico documento HTML.
+
+    Con ``binarias`` se muestran los paneles de opciones binarias en lugar de
+    los de spot, que ahi no significan nada.
+    """
     trades = trades or []
     abiertas = abiertas or []
     avisos = avisos or []
+    es_binarias = binarias is not None and binarias.hay_datos
 
     recarga = (
         f'<meta http-equiv="refresh" content="{autorecarga}">' if autorecarga > 0 else ""
@@ -505,8 +591,8 @@ def render(
         rango += f" · fuentes: {', '.join(fuentes)}"
 
     cuerpo: list[str] = []
-    for aviso in avisos:
-        cuerpo.append(f'<div class="aviso">{_e(aviso)}</div>')
+    if avisos:
+        cuerpo.append(_panel_avisos(avisos))
 
     if not m.hay_datos:
         cuerpo.append(
@@ -518,6 +604,8 @@ def render(
                 f'<div class="panel"><h2>Posiciones abiertas ({len(abiertas)})</h2>'
                 f"{_tabla_abiertas(abiertas, moneda)}</div>"
             )
+    elif es_binarias:
+        cuerpo.extend(_cuerpo_binarias(binarias, trades, moneda))
     else:
         signo = "+" if m.pnl_neto >= 0 else ""
         cuerpo.append(
@@ -565,7 +653,7 @@ def render(
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {recarga}
 <title>Jarvis · {_e(titulo)}</title>
-<style>{CSS}</style>
+<style>{CSS}{_css_binarias() if es_binarias else ""}</style>
 </head>
 <body>
 <div class="envoltorio">

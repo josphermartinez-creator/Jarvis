@@ -6,6 +6,7 @@ from .archivo import FuenteArchivo
 from .base import ErrorDeFuente, Fuente, Lote
 from .basedatos import FuenteBaseDatos
 from .exchange import FuenteExchange
+from .iqoption import FuenteIQOption, buscar_historial, es_historial_binarias
 from .mt5 import FuenteMT5
 
 REGISTRO: dict[str, type[Fuente]] = {
@@ -20,6 +21,9 @@ REGISTRO: dict[str, type[Fuente]] = {
     "bybit": FuenteExchange,
     "mt5": FuenteMT5,
     "metatrader": FuenteMT5,
+    "iqoption": FuenteIQOption,
+    "binarias": FuenteIQOption,
+    "jph": FuenteIQOption,
 }
 
 
@@ -48,8 +52,11 @@ __all__ = [
     "FuenteArchivo",
     "FuenteBaseDatos",
     "FuenteExchange",
+    "FuenteIQOption",
     "FuenteMT5",
     "Lote",
     "REGISTRO",
+    "buscar_historial",
     "crear_fuente",
+    "es_historial_binarias",
 ]

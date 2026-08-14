@@ -37,6 +37,54 @@ def _escapar(texto: str) -> str:
     return texto
 
 
+def resumen_binarias(b, moneda: str = "USD", periodo: str = "") -> str:
+    """Resumen para opciones binarias, con el punto de equilibrio delante."""
+    icono = "🟢" if b.neto > 0 else "🔴" if b.neto < 0 else "⚪"
+    signo = "+" if b.neto >= 0 else ""
+
+    lineas = [
+        f"{icono} *Jarvis* · {_escapar(periodo or 'reporte')}",
+        "",
+        f"*{_escapar(signo + dinero(b.neto))} {_escapar(moneda)}*",
+        "",
+        f"Operaciones: *{b.total}*  \\({b.ganadas}✅ {b.perdidas}❌\\)",
+        f"Efectividad: *{_escapar(pct(b.efectividad))}*",
+        f"Equilibrio: *{_escapar(pct(b.punto_equilibrio))}* "
+        f"\\(pago {_escapar(pct(b.payout_medio * 100, 0))}\\)",
+    ]
+
+    marca = "✅" if b.rentable else "⚠️"
+    lineas.append(f"Margen: *{_escapar(f'{b.margen:+.1f}')}* puntos {marca}")
+    lineas.append("")
+    lineas.append(f"Invertido: {_escapar(dinero(b.invertido))}")
+    lineas.append(f"Retorno: *{_escapar(pct(b.roi))}*")
+    lineas.append(
+        f"Balance: {_escapar(dinero(b.balance_inicial))} → "
+        f"*{_escapar(dinero(b.balance_final))}*"
+    )
+    lineas.append(
+        f"Maxima caida: {_escapar('-' + dinero(b.max_caida))} "
+        f"\\({_escapar(pct(b.max_caida_pct))}\\)"
+    )
+    lineas.append(f"Racha perdedora: {b.racha_perdidas} seguidas")
+
+    if b.por_par:
+        lineas.append("")
+        lineas.append("*Por par*")
+        for bloque in b.por_par[:5]:
+            punto = "🟢" if bloque.rentable else "🔴"
+            s = "+" if bloque.neto >= 0 else ""
+            lineas.append(
+                f"{punto} `{_escapar(bloque.clave)}`  "
+                f"{_escapar(s + dinero(bloque.neto))}  "
+                f"\\({_escapar(pct(bloque.efectividad))}\\)"
+            )
+
+    lineas.append("")
+    lineas.append(f"_{_escapar(b.veredicto)}_")
+    return "\n".join(lineas)
+
+
 def resumen(m: Metricas, moneda: str = "USDT", periodo: str = "") -> str:
     """Resumen compacto pensado para leerse en la pantalla del movil."""
     if not m.hay_datos:

@@ -95,5 +95,7 @@ def test_la_plantilla_generada_es_valida():
     config = Config.desde_dict(_yaml_minimo(PLANTILLA))
 
     assert config.capital_inicial == 1000
-    assert "mi_bot" in config.fuentes
-    assert config.fuentes["mi_bot"]["tipo"] == "archivo"
+    assert "bot_binarias" in config.fuentes
+    assert config.fuentes["bot_binarias"]["tipo"] == "iqoption"
+    # Solo la primera fuente viene activa; el resto son ejemplos comentados.
+    assert len(config.fuentes) == 1

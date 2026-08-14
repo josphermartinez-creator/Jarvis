@@ -9,11 +9,11 @@ El núcleo **no tiene dependencias**: solo la librería estándar de Python. Se
 instala en el mismo servidor que el bot sin arrastrar nada.
 
 ```
-                 ┌── CSV / JSON del bot ──┐
-                 ├── SQLite / Postgres ───┤        ┌── Terminal
-   tu bot  ───►  ├── API del exchange ────┤─► Jarvis ─┤── Dashboard HTML
-                 └── MetaTrader 5 ────────┘        ├── Dashboard en vivo
-                                                   └── Telegram
+                 ┌── Opciones binarias ───┐
+                 ├── CSV / JSON del bot ──┤        ┌── Terminal
+   tu bot  ───►  ├── SQLite / Postgres ───┤─► Jarvis ─┤── Dashboard HTML
+                 ├── API del exchange ────┤        ├── Dashboard en vivo
+                 └── MetaTrader 5 ────────┘        └── Telegram
 ```
 
 ---
@@ -39,6 +39,55 @@ algo. Si sale `LISTO`, ya puedes pedir el reporte:
 jarvis reporte --fuente ~/mi-bot/operaciones.csv --periodo mes
 jarvis dashboard --fuente ~/mi-bot/operaciones.csv     # se abre en el navegador
 ```
+
+---
+
+## Opciones binarias (BOT JPH TRADING / IQ Option)
+
+Jarvis lee directamente el `datos/historial_operaciones.csv` que escribe el bot.
+No hay que configurar nada ni tocar el bot:
+
+```bash
+jarvis reporte --fuente ~/BotIFCAuto/datos/historial_operaciones.csv
+jarvis dashboard --fuente ~/BotIFCAuto/datos/historial_operaciones.csv
+```
+
+Las binarias no se miden como el spot, así que el reporte es distinto. La cifra
+que manda es el **punto de equilibrio**:
+
+> Con un pago del 85%, ganas 0,85 cuando aciertas pero pierdes 1,00 cuando
+> fallas. Necesitas acertar el **54,1%** solo para quedarte igual. Un bot con
+> 52% de efectividad está perdiendo por construcción, aunque la racha de esta
+> semana haya salido bien.
+
+Jarvis calcula ese umbral con el pago real que te está dando el bróker y lo
+compara con tu efectividad real. El resultado es un margen en puntos: positivo,
+la estrategia se sostiene; negativo, a la larga pierde.
+
+Y lo calcula **por separado para cada par y cada estrategia**, porque cada uno
+paga distinto: un par al 87% necesita 53,5% de aciertos y uno al 79% necesita
+55,9%. Un par puede tener mejor efectividad que otro y aun así ser el que te
+está costando dinero.
+
+Además:
+
+- **Efectividad honesta.** Los empates y las operaciones que la API dejó como
+  `desconocido` se excluyen del cálculo en vez de contarse como fallos o
+  aciertos. Aparecen aparte, contadas.
+- **Curva de balance real**, la que reporta el bróker, no una suma acumulada:
+  si hubo depósitos o retiros, se ven.
+- **Máxima caída del balance**, en dinero y en porcentaje desde el pico.
+- **Desglose según pérdidas seguidas previas.** Muestra si la efectividad mejora
+  al profundizar en la cadena de martingala. No mejora nunca: doblar el monto no
+  cambia la probabilidad de acertar, solo agranda lo que hay en juego. El monto
+  medio de cada nivel deja ver cuándo saltó tu límite de pérdidas por par y el
+  bot reinició la cadena.
+- **Por franja horaria y día de la semana**, con su umbral en cada fila.
+
+La profundidad de la cadena Jarvis la deduce recorriendo el historial, no de la
+columna `racha_perdidas_momento`: el bot escribe esa columna después de procesar
+el resultado, así que en una operación ganadora siempre vale 0 y no dice desde
+qué nivel se entró.
 
 ---
 
@@ -96,9 +145,9 @@ Con eso Jarvis ya tiene todo lo que necesita.
 
 ## Fusionar varias fuentes
 
-Esta es la parte interesante. Puedes tener el CSV de tu bot **y** la API del
-exchange apuntando a las mismas operaciones: Jarvis lee ambas, detecta los
-duplicados y deja un libro único.
+Esta es la parte interesante. Puedes tener el historial de tu bot de binarias
+**y** el CSV de otro bot **y** la API de un exchange: Jarvis lee todas, detecta
+los duplicados y deja un libro único.
 
 Sirve para lo que más cuesta ver de otro modo: si el bot cree que ganó algo que
 el exchange no confirma, la diferencia salta a la vista.
@@ -110,19 +159,17 @@ cp jarvis.example.yaml jarvis.yaml
 ```
 
 ```yaml
-capital_inicial: 1000
-moneda: USDT
+capital_inicial: 250
+moneda: USD
 
 fuentes:
-  mi_bot:
+  bot_binarias:
+    tipo: iqoption
+    ruta: ~/BotIFCAuto/datos/historial_operaciones.csv
+
+  otro_bot:
     tipo: archivo
     ruta: ~/mi-bot/operaciones.csv
-
-  binance:
-    tipo: binance
-    api_key: ${BINANCE_API_KEY}
-    api_secret: ${BINANCE_API_SECRET}
-    simbolos: [BTCUSDT, ETHUSDT]
 ```
 
 Y ya:

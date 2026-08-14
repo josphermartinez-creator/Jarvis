@@ -17,6 +17,7 @@ from typing import Any, Iterable
 
 from ..models import Fill, Trade
 from .base import ErrorDeFuente, Fuente, Lote
+from .iqoption import FuenteIQOption, es_historial_binarias
 from .parsing import a_direccion, a_fecha, a_lado, a_numero, mapear_columnas
 
 
@@ -37,7 +38,22 @@ class FuenteArchivo(Fuente):
         lote = Lote()
 
         for ruta in rutas:
+            primera = True
             for fila in self._filas(ruta):
+                # El historial de opciones binarias tiene su propio formato
+                # (monto y resultado en vez de precios) y su propia fuente.
+                # Se detecta por las cabeceras para que apuntar Jarvis al CSV
+                # del bot funcione sin declarar el tipo.
+                if primera:
+                    primera = False
+                    if es_historial_binarias(fila.keys()):
+                        delegada = FuenteIQOption(self.nombre, **{
+                            **self.opciones, "ruta": str(ruta)
+                        })
+                        sub = delegada.leer(desde, hasta)
+                        lote.trades.extend(sub.trades)
+                        break
+
                 try:
                     registro = self._convertir(fila, ruta)
                 except (ValueError, KeyError) as e:

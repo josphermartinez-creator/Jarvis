@@ -12,6 +12,7 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from .sources.iqoption import RESULTADOS_VALIDOS, es_historial_binarias
 from .sources.parsing import a_fecha, a_lado, a_numero, mapear_columnas
 
 # Lo minimo para poder reconstruir operaciones a partir de ejecuciones.
@@ -34,6 +35,17 @@ DESCRIPCIONES = {
     "fee": "comision",
     "fee_currency": "moneda de la comision",
     "ext_id": "identificador de la operacion",
+    # Campos del historial de opciones binarias.
+    "timestamp": "fecha y hora de la operacion",
+    "par": "par operado",
+    "resultado": "win / loss / empate",
+    "monto": "importe apostado",
+    "ganancia": "resultado en dinero",
+    "estrategia": "estrategia que abrio la operacion",
+    "balance": "saldo tras la operacion",
+    "franja_horaria": "franja de una hora",
+    "dia_semana": "dia de la semana",
+    "racha_perdidas_momento": "perdidas seguidas tras la operacion",
 }
 
 
@@ -111,6 +123,9 @@ def inspeccionar(ruta: Path | str) -> Diagnostico:
     diag.columnas = list(filas[0].keys())
     diag.muestra = filas[0]
 
+    if es_historial_binarias(diag.columnas):
+        return _diagnostico_binarias(diag, filas)
+
     try:
         diag.detectado = mapear_columnas(diag.columnas)
     except KeyError as e:
@@ -137,6 +152,72 @@ def inspeccionar(ruta: Path | str) -> Diagnostico:
         diag.modo = ""
 
     diag.problemas.extend(_validar_valores(filas, diag.detectado))
+    return diag
+
+
+def _diagnostico_binarias(diag: Diagnostico, filas: list[dict]) -> Diagnostico:
+    """Diagnostico del historial de opciones binarias del bot.
+
+    Este formato no se mide con los campos del spot: aqui lo que hace falta es
+    la fecha, el par, el monto apostado, el resultado y la ganancia.
+    """
+    diag.modo = "opciones binarias (historial del bot)"
+    esperadas = {
+        "timestamp": "fecha y hora",
+        "par": "par operado",
+        "resultado": "win / loss / empate",
+        "monto": "importe apostado",
+        "ganancia": "resultado en dinero",
+    }
+
+    presentes = {c.strip().lower() for c in diag.columnas}
+    for columna, descripcion in esperadas.items():
+        if columna in presentes:
+            diag.detectado[columna] = columna
+        elif columna == "timestamp" and "fecha" in presentes:
+            diag.detectado["timestamp"] = "fecha"
+        else:
+            diag.faltan.append(columna)
+
+    for opcional in ("estrategia", "balance", "franja_horaria", "dia_semana",
+                     "direccion", "racha_perdidas_momento"):
+        if opcional in presentes:
+            diag.detectado[opcional] = opcional
+
+    if diag.faltan:
+        diag.modo = ""
+        return diag
+
+    # Los resultados raros no rompen el reporte, pero conviene avisar.
+    raros = {
+        (f.get("resultado") or "").strip().lower()
+        for f in filas
+    } - set(RESULTADOS_VALIDOS) - {""}
+    if raros:
+        diag.problemas.append(
+            f"valores de 'resultado' que no reconozco: {', '.join(sorted(raros))}"
+        )
+
+    sin_confirmar = sum(
+        1 for f in filas if (f.get("resultado") or "").strip().lower() == "desconocido"
+    )
+    if sin_confirmar:
+        diag.problemas.append(
+            f"{sin_confirmar} de {len(filas)} operaciones estan como "
+            f"'desconocido' (la API no confirmo el resultado): se excluyen del "
+            f"calculo para no falsear la efectividad"
+        )
+
+    if "estrategia" not in presentes:
+        diag.problemas.append(
+            "sin columna 'estrategia': no podre desglosar por estrategia"
+        )
+    if "balance" not in presentes:
+        diag.problemas.append(
+            "sin columna 'balance': la curva y la maxima caida se calcularan "
+            "acumulando las ganancias, sin reflejar depositos ni retiros"
+        )
+
     return diag
 
 

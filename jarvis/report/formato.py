@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import os
 import re
+import sys
 
 ANCHO = 64
 _CODIGOS_ANSI = re.compile(r"\033\[[0-9;]*m")
@@ -11,6 +13,48 @@ _CODIGOS_ANSI = re.compile(r"\033\[[0-9;]*m")
 def sin_color(texto: str) -> str:
     """Quita los codigos ANSI para poder medir el ancho real del texto."""
     return _CODIGOS_ANSI.sub("", texto)
+
+
+class Color:
+    VERDE = "\033[32m"
+    ROJO = "\033[31m"
+    AMARILLO = "\033[33m"
+    GRIS = "\033[90m"
+    NEGRITA = "\033[1m"
+    FIN = "\033[0m"
+
+
+def color_activo(forzar: bool | None = None) -> bool:
+    """Decide si pintar: solo en terminal y si NO_COLOR no lo prohibe."""
+    if forzar is not None:
+        return forzar
+    if os.environ.get("NO_COLOR"):
+        return False
+    return sys.stdout.isatty()
+
+
+class Pintor:
+    """Aplica color solo si la terminal lo admite."""
+
+    def __init__(self, activo: bool):
+        self.activo = activo
+
+    def __call__(self, texto: str, color: str) -> str:
+        return f"{color}{texto}{Color.FIN}" if self.activo else texto
+
+    def segun_signo(self, texto: str, valor: float) -> str:
+        if valor > 0:
+            return self(texto, Color.VERDE)
+        if valor < 0:
+            return self(texto, Color.ROJO)
+        return self(texto, Color.GRIS)
+
+
+def linea(izq: str, der: str, ancho: int = ANCHO) -> str:
+    """Une etiqueta y valor separados por puntos, ignorando codigos de color."""
+    visible = len(sin_color(izq)) + len(sin_color(der))
+    relleno = max(1, ancho - visible - 2)
+    return f"{izq} {'.' * relleno} {der}"
 
 
 def dinero(valor: float, decimales: int = 2) -> str:
