@@ -1,0 +1,83 @@
+# Configuracion de ejemplo de Jarvis.
+#
+# Copiala a 'jarvis.yaml' (ese nombre esta en .gitignore, para que tus rutas y
+# claves no acaben en el repositorio):
+#
+#     cp jarvis.example.yaml jarvis.yaml
+#
+# Cada bloque dentro de 'fuentes' es un origen de datos. Se leen todos y se
+# fusionan en un unico libro de operaciones, quitando los duplicados.
+
+capital_inicial: 1000        # para el drawdown y la rentabilidad en %
+moneda: USDT
+zona_horaria: UTC
+
+
+fuentes:
+
+  # --- 1. El archivo que escribe tu bot --------------------------------
+  # Lo mas comun. Jarvis detecta las columnas solo: acepta nombres en
+  # espanol o ingles y fechas en cualquier formato habitual.
+  # Comprueba antes que tu archivo sirve:  jarvis inspeccionar ops.csv
+  mi_bot:
+    tipo: archivo
+    ruta: ~/mi-bot/operaciones.csv
+
+    # Solo si la deteccion automatica no acierta con alguna columna:
+    # columnas:
+    #   ts: momento_ejecucion
+    #   symbol: par
+    #   side: operacion
+    #   qty: volumen
+    #   price: precio_medio
+    #   fee: coste
+
+  # Varios archivos de golpe (un log por mes, por ejemplo):
+  # historico:
+  #   tipo: archivo
+  #   ruta: ~/mi-bot/logs/*.csv
+
+  # --- 2. La base de datos del bot -------------------------------------
+  # Se abre siempre en solo lectura: Jarvis no puede modificar nada.
+  # base:
+  #   tipo: sqlite
+  #   ruta: ~/mi-bot/bot.db
+  #   tabla: trades
+  #   # o una consulta propia, que manda sobre 'tabla':
+  #   # consulta: SELECT * FROM trades WHERE estado = 'cerrada'
+
+  # --- 3. El exchange, como fuente de verdad ---------------------------
+  # Usa claves de SOLO LECTURA. Quitale el permiso de trading a la API key
+  # antes de ponerla aqui.
+  # Las claves van como ${VARIABLE} y se exportan en el entorno; nunca
+  # escritas en este archivo.
+  #
+  #   export BINANCE_API_KEY="..."
+  #   export BINANCE_API_SECRET="..."
+  #
+  # binance:
+  #   tipo: binance                 # o binance_futuros
+  #   api_key: ${BINANCE_API_KEY}
+  #   api_secret: ${BINANCE_API_SECRET}
+  #   simbolos: [BTCUSDT, ETHUSDT]  # Binance obliga a consultar uno a uno
+
+  # bybit:
+  #   tipo: bybit
+  #   api_key: ${BYBIT_API_KEY}
+  #   api_secret: ${BYBIT_API_SECRET}
+  #   categoria: linear             # linear, spot o inverse
+
+  # --- 4. MetaTrader 5 (forex, indices, CFDs) --------------------------
+  # metatrader:
+  #   tipo: mt5
+  #   modo: auto                    # auto, directo (Windows) o informe
+  #   ruta: ~/informes/historial.html   # para el modo informe
+
+
+# --- Envio por Telegram (opcional) -------------------------------------
+# Crea un bot con @BotFather y quedate con el token. Para saber tu chat_id,
+# escribele algo al bot y abre:
+#   https://api.telegram.org/bot<TOKEN>/getUpdates
+telegram:
+  token: ${TELEGRAM_BOT_TOKEN}
+  chat_id: ${TELEGRAM_CHAT_ID}

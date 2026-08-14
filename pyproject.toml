@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jarvis-trading"
+version = "0.1.0"
+description = "Reportes y dashboard para tu bot de trading"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["trading", "bot", "reportes", "dashboard", "binance", "bybit", "mt5"]
+
+# El nucleo funciona solo con la libreria estandar: se puede instalar en el
+# mismo servidor que el bot sin arrastrar nada.
+dependencies = []
+
+[project.optional-dependencies]
+# Lector de YAML completo. Sin el, Jarvis usa uno minimo incluido que basta
+# para la plantilla de configuracion.
+yaml = ["pyyaml>=6.0"]
+postgres = ["psycopg2-binary>=2.9"]
+mysql = ["pymysql>=1.1"]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+jarvis = "jarvis.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["jarvis*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
