@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Configuracion local: puede contener rutas y claves. Usa jarvis.example.yaml
+# como plantilla y manten el tuyo fuera del repositorio.
+jarvis.yaml
+jarvis.yml
+.jarvis.yaml
+.env
+
+# Reportes generados
+reportes/
+*.report.html
+
+.pytest_cache/
+.coverage
