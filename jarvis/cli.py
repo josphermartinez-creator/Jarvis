@@ -5,6 +5,8 @@
     jarvis reporte --html r.html      genera el dashboard
     jarvis dashboard                  dashboard en vivo en el navegador
     jarvis telegram                   manda el resumen al movil
+    jarvis vivo                       que esta haciendo el bot ahora mismo
+    jarvis vivo --seguir              lo anterior, refrescandose solo
     jarvis inspeccionar datos.csv     dice si tu archivo sirve y que le falta
     jarvis init                       crea el archivo de configuracion
     jarvis fuentes                    comprueba que las fuentes responden
@@ -224,6 +226,52 @@ def cmd_telegram(args) -> int:
     return 0
 
 
+def cmd_vivo(args) -> int:
+    """Estado actual del bot, opcionalmente refrescandose solo."""
+    import time
+
+    from . import vivo
+    from .report.vivo_consola import render
+
+    config = cargar(args.config) if not args.url else Config()
+    url = args.url or config.url_bot or vivo.URL_POR_DEFECTO
+    password = args.password or config.bot.get("password", "")
+    c = _pintor(args)
+
+    while True:
+        try:
+            estado = vivo.consultar(url, password)
+        except vivo.BotNoDisponible as e:
+            if not args.seguir:
+                print(f"Bot sin conexion: {e}", file=sys.stderr)
+                return 1
+            salida = f"Bot sin conexion: {e}"
+        else:
+            salida = render(estado, config.moneda, c)
+            for aviso in vivo.avisos(estado):
+                salida += "\n" + c(f"  ! {aviso}", "\033[33m")
+
+        if args.seguir:
+            # Limpia la pantalla y vuelve arriba, para que se lea como un panel
+            # que se actualiza en vez de un log que crece.
+            print("\033[2J\033[H", end="")
+        print(salida)
+
+        if not args.seguir:
+            return 0
+        try:
+            time.sleep(args.intervalo)
+        except KeyboardInterrupt:
+            print()
+            return 0
+
+
+def _pintor(args):
+    from .report.formato import Pintor, color_activo
+
+    return Pintor(color_activo(False if getattr(args, "sin_color", False) else None))
+
+
 def cmd_inspeccionar(args) -> int:
     from .inspect import formatear, inspeccionar
 
@@ -334,6 +382,21 @@ def construir_parser() -> argparse.ArgumentParser:
     sp.add_argument("--chat-id", help="identificador del chat de destino")
     sp.add_argument("--adjuntar", action="store_true", help="adjuntar el dashboard HTML")
     sp.set_defaults(func=cmd_telegram)
+
+    sp = sub.add_parser("vivo", help="estado actual del bot, leido de su panel")
+    sp.add_argument("--url", help="panel del bot (por defecto http://127.0.0.1:5000)")
+    sp.add_argument("--password", help="contrasena del panel, si Jarvis corre en otra PC")
+    sp.add_argument(
+        "-s", "--seguir", action="store_true",
+        help="refrescar en bucle hasta Ctrl+C",
+    )
+    sp.add_argument(
+        "-i", "--intervalo", type=float, default=5.0,
+        help="segundos entre refrescos con --seguir (por defecto 5)",
+    )
+    sp.add_argument("--config", help="archivo de configuracion")
+    sp.add_argument("--sin-color", action="store_true", help="salida sin color")
+    sp.set_defaults(func=cmd_vivo)
 
     sp = sub.add_parser(
         "inspeccionar", help="comprobar si un archivo de operaciones sirve"

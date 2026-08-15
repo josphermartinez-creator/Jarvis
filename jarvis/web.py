@@ -18,7 +18,7 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
-from . import binarias
+from . import binarias, vivo
 from .config import Config
 from .merge import fusionar
 from .metrics import calcular, filtrar_periodo, rango_periodo
@@ -52,7 +52,8 @@ class _Cache:
         return valor
 
 
-def _construir_pagina(config: Config, periodo: str, refresco: int) -> str:
+def _analizar(config: Config, periodo: str):
+    """Lee las fuentes y calcula. Es la parte cara, y la que se cachea."""
     fuentes = [crear_fuente(n, c) for n, c in config.fuentes.items()]
     desde, hasta = rango_periodo(periodo)
     libro = fusionar(fuentes, desde, hasta)
@@ -63,6 +64,36 @@ def _construir_pagina(config: Config, periodo: str, refresco: int) -> str:
     avisos = list(libro.errores)
     if metricas_binarias.hay_datos:
         avisos.extend(binarias.avisos(metricas_binarias))
+
+    return metricas, trades, libro, metricas_binarias, avisos
+
+
+def _estado_del_bot(config: Config):
+    """Consulta el panel del bot. Que este apagado es normal, no un error."""
+    if not config.url_bot:
+        return None, ""
+    try:
+        return vivo.consultar(config.url_bot, config.bot.get("password", "")), ""
+    except vivo.BotNoDisponible as e:
+        return None, str(e)
+
+
+def _construir_pagina(
+    config: Config, periodo: str, refresco: int, cache: _Cache
+) -> str:
+    """Arma la pagina: analisis cacheado + estado del bot recien consultado.
+
+    El estado en vivo se pide en cada peticion, fuera de la cache: servirlo con
+    veinte segundos de retraso lo vaciaria de sentido, y es una llamada barata
+    a localhost.
+    """
+    metricas, trades, libro, metricas_binarias, avisos = cache.obtener(
+        periodo, lambda: _analizar(config, periodo)
+    )
+
+    estado_vivo, error_vivo = _estado_del_bot(config)
+    if estado_vivo is not None:
+        avisos = vivo.avisos(estado_vivo) + avisos
 
     return reporte_html.render(
         metricas,
@@ -75,6 +106,8 @@ def _construir_pagina(config: Config, periodo: str, refresco: int) -> str:
         fuentes=libro.fuentes_ok,
         autorecarga=refresco,
         binarias=metricas_binarias,
+        vivo=estado_vivo,
+        vivo_error=error_vivo,
     )
 
 
@@ -93,7 +126,7 @@ def crear_handler(config: Config, periodo: str, refresco: int, cache: _Cache):
             elegido = consulta.get("periodo", [periodo])[0]
 
             try:
-                cuerpo = cache.obtener(elegido, lambda: _construir_pagina(config, elegido, refresco))
+                cuerpo = _construir_pagina(config, elegido, refresco, cache)
             except Exception as e:  # noqa: BLE001 - el navegador debe ver el motivo
                 cuerpo = _pagina_error(e)
 

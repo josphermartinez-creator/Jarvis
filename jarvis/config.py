@@ -57,6 +57,13 @@ fuentes:
   #   api_secret: ${BINANCE_API_SECRET}
   #   simbolos: [BTCUSDT, ETHUSDT]
 
+# Panel del bot, para ver su estado en vivo (si esta operando, el balance
+# ahora mismo, que tiene en juego). Jarvis solo lee: nunca lo arranca ni lo
+# detiene. Desde la misma PC no hace falta contrasena.
+bot:
+  url: http://127.0.0.1:5000
+  # password: ${BOT_LAN_PASSWORD}   # solo si Jarvis corre en otra PC
+
 # Envio automatico por Telegram (opcional).
 telegram:
   token: ${TELEGRAM_BOT_TOKEN}
@@ -71,6 +78,8 @@ class Config:
     zona_horaria: str = "UTC"
     fuentes: dict[str, dict] = field(default_factory=dict)
     telegram: dict[str, str] = field(default_factory=dict)
+    # Panel del bot, para leer su estado en vivo. Vacio = no consultarlo.
+    bot: dict[str, str] = field(default_factory=dict)
     ruta: Path | None = None
 
     @classmethod
@@ -82,8 +91,13 @@ class Config:
             zona_horaria=str(datos.get("zona_horaria", "UTC")),
             fuentes=dict(datos.get("fuentes") or {}),
             telegram=dict(datos.get("telegram") or {}),
+            bot=dict(datos.get("bot") or {}),
             ruta=ruta,
         )
+
+    @property
+    def url_bot(self) -> str:
+        return str(self.bot.get("url", "")).strip()
 
 
 def buscar_config(inicio: Path | None = None) -> Path | None:

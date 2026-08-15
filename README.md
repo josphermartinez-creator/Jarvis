@@ -91,6 +91,47 @@ qué nivel se entró.
 
 ---
 
+## Ver el bot en vivo
+
+El CSV solo cuenta el pasado: una fila aparece cuando la operación **ya cerró**.
+Para saber qué está pasando ahora mismo, Jarvis consulta el panel del propio bot
+en `http://127.0.0.1:5000`.
+
+```bash
+jarvis vivo              # una foto del estado actual
+jarvis vivo --seguir     # se refresca solo hasta que pulses Ctrl+C
+```
+
+Desde la misma PC no hace falta contraseña. Si Jarvis corre en otro equipo de tu
+red, pon la del panel en `bot.password`.
+
+Lo que ves en vivo, que el histórico no puede darte:
+
+| | |
+|---|---|
+| **Estado** | si está corriendo, si sigue conectado al bróker |
+| **Modo** | práctica o **dinero real** — marcado en rojo |
+| **Balance** | el de ahora, no el de la última operación cerrada |
+| **En juego** | dinero comprometido en operaciones abiertas en este instante |
+| **Martingala** | nivel actual y cuánto sería la próxima apuesta |
+| **Pares** | cuáles están operando y cuáles bloqueados por pérdidas |
+| **Log** | las últimas líneas, las mismas que ves en el panel |
+
+Y en el dashboard aparecen **las dos cosas juntas**: el estado en vivo arriba,
+el análisis del histórico debajo.
+
+```bash
+jarvis dashboard
+```
+
+Si el bot está cerrado no pasa nada: sale un aviso discreto y el análisis del
+histórico se muestra igual, porque sale del CSV guardado.
+
+> Jarvis solo lee. Nunca llama a `/api/iniciar` ni a `/api/detener`: quien
+> decide si el bot opera eres tú, no el panel de reportes.
+
+---
+
 ## Qué necesita Jarvis de tu bot
 
 **Nada especial.** Solo que deje constancia de sus operaciones en algún sitio.

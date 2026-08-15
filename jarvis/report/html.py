@@ -501,6 +501,13 @@ def _css_binarias() -> str:
     return CSS_EXTRA
 
 
+def _css_vivo() -> str:
+    """Estilos del panel de estado en vivo."""
+    from .vivo_html import CSS_EXTRA
+
+    return CSS_EXTRA
+
+
 def _cuerpo_binarias(b, trades: list[Trade], moneda: str) -> list[str]:
     """Paneles del dashboard cuando el historial es de opciones binarias."""
     from . import binarias_html as bh
@@ -566,16 +573,22 @@ def render(
     fuentes: list[str] | None = None,
     autorecarga: int = 0,
     binarias=None,
+    vivo=None,
+    vivo_error: str = "",
 ) -> str:
     """Genera el dashboard completo como un unico documento HTML.
 
     Con ``binarias`` se muestran los paneles de opciones binarias en lugar de
     los de spot, que ahi no significan nada.
+
+    ``vivo`` es el estado actual del bot leido de su panel. Va arriba del todo:
+    primero que esta pasando ahora, despues el analisis del historial.
     """
     trades = trades or []
     abiertas = abiertas or []
     avisos = avisos or []
     es_binarias = binarias is not None and binarias.hay_datos
+    hay_vivo = vivo is not None or bool(vivo_error)
 
     recarga = (
         f'<meta http-equiv="refresh" content="{autorecarga}">' if autorecarga > 0 else ""
@@ -591,6 +604,13 @@ def render(
         rango += f" · fuentes: {', '.join(fuentes)}"
 
     cuerpo: list[str] = []
+    if hay_vivo:
+        from . import vivo_html
+
+        cuerpo.append(
+            vivo_html.panel(vivo, moneda) if vivo is not None
+            else vivo_html.panel_apagado(vivo_error, "")
+        )
     if avisos:
         cuerpo.append(_panel_avisos(avisos))
 
@@ -653,7 +673,7 @@ def render(
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {recarga}
 <title>Jarvis · {_e(titulo)}</title>
-<style>{CSS}{_css_binarias() if es_binarias else ""}</style>
+<style>{CSS}{_css_binarias() if es_binarias else ""}{_css_vivo() if hay_vivo else ""}</style>
 </head>
 <body>
 <div class="envoltorio">

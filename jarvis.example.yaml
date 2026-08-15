@@ -91,6 +91,20 @@ fuentes:
 # Crea un bot con @BotFather y quedate con el token. Para saber tu chat_id,
 # escribele algo al bot y abre:
 #   https://api.telegram.org/bot<TOKEN>/getUpdates
+# ── Estado en vivo ──────────────────────────────────────────────────────
+# El historial en CSV solo cuenta el pasado: una fila aparece cuando la
+# operacion ya cerro. Para ver que esta pasando AHORA (si el bot corre, el
+# balance actual, cuanto tiene en juego) Jarvis consulta el panel del bot.
+#
+# Jarvis solo LEE. Nunca arranca ni detiene el bot.
+bot:
+  url: http://127.0.0.1:5000
+
+  # Solo si Jarvis corre en OTRA PC de la red y activaste el acceso LAN en el
+  # bot. Desde la misma PC no hace falta.
+  # password: ${BOT_LAN_PASSWORD}
+
+
 telegram:
   token: ${TELEGRAM_BOT_TOKEN}
   chat_id: ${TELEGRAM_CHAT_ID}
