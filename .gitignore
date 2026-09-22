@@ -1,0 +1,8 @@
+.venv/
+.cache/
+__pycache__/
+*.pyc
+# Keep the requested deliverable in Git, but not alternate render outputs.
+exports/*
+!exports/viaje-infinito.mp4
+!exports/viaje-infinito.jpg

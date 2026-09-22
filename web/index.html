@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b16">
+  <title>Viaje infinito · Ver y descargar</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #080b16; color: #f5f5fb; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100svh; background: radial-gradient(ellipse at 16% 20%, #20204b66, transparent 56%), radial-gradient(ellipse at 84% 80%, #152d4566, transparent 58%), #080b16; }
+    main { min-height: 100svh; max-width: 1080px; padding: 42px 36px; margin: auto; display: grid; grid-template-columns: 1fr minmax(240px, 380px); align-items: center; gap: 72px; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: #b8b0eb; font-size: 11px; font-weight: 650; letter-spacing: .22em; text-transform: uppercase; }
+    .orbit { width: 23px; height: 23px; }
+    h1 { font-size: clamp(42px, 6vw, 70px); line-height: 1.03; letter-spacing: -.065em; margin: 26px 0 20px; font-weight: 650; }
+    h1 span { display: block; color: #c1baff; }
+    .description { color: #a8adbf; line-height: 1.8; font-size: 16px; max-width: 340px; }
+    .details { display: flex; gap: 9px; flex-wrap: wrap; margin: 24px 0 34px; }
+    .details span { border: 1px solid #ffffff15; border-radius: 7px; padding: 7px 10px; font-size: 12px; color: #c2c5d5; background: #ffffff04; }
+    .actions { display: grid; gap: 12px; max-width: 320px; }
+    button, .download { width: 100%; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; justify-content: center; gap: 10px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background .2s, transform .2s; }
+    button { border: 0; color: #101125; background: #c1baff; }
+    button:hover { background: #d5d0ff; }
+    .download { border: 1px solid #ffffff28; color: #ecebf7; background: #ffffff05; }
+    .download:hover { background: #ffffff10; }
+    button:focus-visible, a:focus-visible { outline: 3px solid #8bc9ff; outline-offset: 4px; }
+    .icon { width: 18px; height: 18px; flex-shrink: 0; }
+    .file-note { font-size: 11px; color: #747d96; margin: 12px 0 0; text-align: center; max-width: 320px; }
+    .screen { position: relative; border-radius: 17px; background: #03050a; box-shadow: 0 24px 90px #0009, 0 0 0 1px #ffffff16; overflow: hidden; }
+    video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: contain; background: #03050a; }
+    .caption { text-align: center; font-size: 11px; color: #777e93; letter-spacing: .03em; margin: 15px 0 0; }
+    #status { min-height: 1.5em; color: #9aa4ba; font-size: 12px; margin-top: 15px; max-width: 330px; }
+    @media (max-width: 700px) {
+      main { padding: 25px 20px 34px; display: flex; flex-direction: column; gap: 23px; max-width: 460px; }
+      .intro { width: 100%; }
+      .eyebrow { font-size: 10px; }
+      h1 { font-size: 36px; margin: 15px 0 10px; letter-spacing: -.055em; }
+      h1 span { display: inline; }
+      .description { font-size: 14px; margin: 0; max-width: none; }
+      .details { margin: 15px 0 20px; }
+      .actions { max-width: none; grid-template-columns: 1fr 1fr; gap: 9px; }
+      button, .download { font-size: 12px; padding: 13px 8px; }
+      .file-note { max-width: none; }
+      #status { margin: 8px 0 0; min-height: 0; }
+      .film { width: min(100%, 350px); }
+      .caption { font-size: 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) { button, .download { transition: none; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="intro" aria-labelledby="title">
+      <div class="eyebrow">
+        <svg class="orbit" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="5" stroke="currentColor"/><ellipse cx="12" cy="12" rx="11" ry="4" transform="rotate(-32 12 12)" stroke="currentColor"/><circle cx="19.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
+        Un viaje por el cosmos
+      </div>
+      <h1 id="title">Viaje <span>infinito.</span></h1>
+      <p class="description">Entre estrellas, planetas y galaxias.<br>El viaje no se detiene: el final vuelve a ser el principio.</p>
+      <div class="details"><span>30 segundos</span><span>Full HD · Vertical</span><span>En bucle</span></div>
+      <div class="actions">
+        <button id="play" type="button">
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15L20 12 7 4.5Z"/></svg>
+          <span id="play-label">Ver con sonido</span>
+        </button>
+        <a class="download" href="/download" download="viaje-infinito.mp4">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>
+          Descargar video
+        </a>
+      </div>
+      <p class="file-note">Archivo MP4 · 17.4 MB · 1080 × 1920</p>
+      <p id="status" role="status" aria-live="polite"></p>
+    </section>
+    <section class="film" aria-label="Reproductor del video">
+      <div class="screen">
+        <video id="video" controls playsinline loop autoplay muted preload="metadata" poster="/poster.jpg" aria-label="Viaje continuo por el espacio durante 30 segundos">
+          <source src="/video.mp4" type="video/mp4">
+          Tu navegador no puede reproducir el video. <a href="/download">Descárgalo aquí.</a>
+        </video>
+      </div>
+      <p class="caption">Animación original · Sonido ambiental · Sin texto</p>
+    </section>
+  </main>
+  <script>
+    const video = document.getElementById('video');
+    const button = document.getElementById('play');
+    const label = document.getElementById('play-label');
+    const status = document.getElementById('status');
+    function update() {
+      label.textContent = video.paused ? 'Reproducir video' : video.muted ? 'Ver con sonido' : 'Pausar video';
+    }
+    button.addEventListener('click', async () => {
+      if (!video.paused && !video.muted) {
+        video.pause();
+      } else {
+        video.muted = false;
+        try { await video.play(); status.textContent = ''; }
+        catch { status.textContent = 'Pulsa ▶ en el reproductor o descarga el MP4.'; }
+      }
+      update();
+    });
+    for (const event of ['play', 'pause', 'volumechange']) video.addEventListener(event, update);
+    video.addEventListener('error', () => { status.textContent = 'No se pudo reproducir aquí. Usa «Descargar video» para abrirlo en tu dispositivo.'; });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      video.autoplay = false;
+      video.pause();
+    }
+  </script>
+</body>
+</html>
