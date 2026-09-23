@@ -1,5 +1,31 @@
 # Jarvis
 
+## Jirafa bebé — Hojas de acacia
+
+**[Descargar el video de 30 segundos](https://github.com/josphermartinez-creator/Jarvis/raw/refs/heads/arena/01a0c9ee-jarvis/exports/jirafa-bebe.mp4)**
+
+Una jirafa bebé de **aspecto fotográfico** mastica unas hojas de acacia en la sabana. **1080 × 1920, 30 fps, 30 segundos**, cámara fija y una única acción: masticación tranquila. Sin caminatas, cambios de escena, texto, voz ni música. Incluye un ambiente muy tenue de viento y hojas, sintetizado para la pieza.
+
+Es una **animación 2.5D de imágenes generadas con IA**, no una grabación real de fauna. Se evita el estilo de caricatura de los videos anteriores: ojos de proporciones naturales, pelo fino, pestañas, hocico, osiconos pequeños y un patrón de pelaje consistente.
+
+El movimiento se limita a una pequeña máscara anatómica de la mandíbula inferior, las hojas y cuatro parpadeos puntuales. El cráneo, las orejas, las fosas nasales, el cuello, las manchas y el fondo no se deforman ni cambian de encuadre. La mandíbula sigue una trayectoria lateral y vertical suave, con pequeñas variaciones de ritmo. La secuencia visual es periódica para repetirse sin un corte evidente.
+
+- Video: `exports/jirafa-bebe.mp4`.
+- Portada: `exports/jirafa-bebe.jpg`.
+- Placas fotográficas generadas, conservadas en PNG: `assets/giraffe/`.
+- Código: `render_giraffe.py`.
+- Parches de mandíbula interpolados: `.cache/giraffe/`, fuera de Git.
+
+```bash
+.venv/bin/python render_giraffe.py --preview
+.venv/bin/python render_giraffe.py
+# Si se prefiere sin sonido:
+.venv/bin/python render_giraffe.py --silent --output exports/jirafa-bebe-sin-sonido.mp4
+```
+
+La página principal y `/jirafa` abren este reproductor. El MP4 se reproduce en `/giraffe/video.mp4` y se descarga en `/giraffe/download`. Los videos anteriores siguen en `/pollito`, `/hipopotamo` y `/universo`.
+
+
 ## Pollito comiendo — Un pequeño banquete
 
 **[Descargar el video de 30 segundos](https://github.com/josphermartinez-creator/Jarvis/raw/refs/heads/arena/01a0c9ee-jarvis/exports/pollito-comiendo.mp4)**
@@ -19,7 +45,7 @@ Es una **animación 2.5D con imágenes generadas con IA**, no una grabación de 
 .venv/bin/python render_chick.py
 ```
 
-La página principal y `/pollito` abren el reproductor del pollito. El MP4 se reproduce en `/chick/video.mp4` y se descarga en `/chick/download`. Los videos anteriores siguen disponibles en `/hipopotamo` y `/universo`.
+La ruta `/pollito` abre el reproductor del pollito. El MP4 se reproduce en `/chick/video.mp4` y se descarga en `/chick/download`. Los videos anteriores siguen disponibles en `/hipopotamo` y `/universo`.
 
 
 ## Hipopótamo bebé — Pequeño del río

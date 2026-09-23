@@ -13,8 +13,12 @@ from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parent
 ROUTES = {
-    "/": ("web/chick.html", "text/html; charset=utf-8"),
-    "/index.html": ("web/chick.html", "text/html; charset=utf-8"),
+    "/": ("web/giraffe.html", "text/html; charset=utf-8"),
+    "/index.html": ("web/giraffe.html", "text/html; charset=utf-8"),
+    "/jirafa": ("web/giraffe.html", "text/html; charset=utf-8"),
+    "/giraffe/video.mp4": ("exports/jirafa-bebe.mp4", "video/mp4"),
+    "/giraffe/download": ("exports/jirafa-bebe.mp4", "video/mp4"),
+    "/giraffe/poster.jpg": ("exports/jirafa-bebe.jpg", "image/jpeg"),
     "/pollito": ("web/chick.html", "text/html; charset=utf-8"),
     "/chick/video.mp4": ("exports/pollito-comiendo.mp4", "video/mp4"),
     "/chick/download": ("exports/pollito-comiendo.mp4", "video/mp4"),

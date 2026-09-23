@@ -3,35 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#29241a">
-  <title>Pollito comiendo · Ver y descargar</title>
+  <meta name="theme-color" content="#242920">
+  <title>Jirafa bebé · Ver y descargar</title>
   <style>
-    :root { color-scheme: dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #29241a; color: #fff5df; }
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #242920; color: #f1f1e5; }
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100svh; background: radial-gradient(ellipse at 12% 10%, #91713738, transparent 54%), radial-gradient(ellipse at 82% 94%, #77633a28, transparent 56%), #29241a; }
+    body { margin: 0; min-height: 100svh; background: radial-gradient(ellipse at 12% 10%, #667b4e2d, transparent 54%), radial-gradient(ellipse at 82% 94%, #a8916d1a, transparent 56%), #242920; }
     main { min-height: 100svh; max-width: 1090px; padding: 40px 36px; margin: auto; display: grid; grid-template-columns: 1fr minmax(240px, 375px); align-items: center; gap: 74px; }
-    .eyebrow { display: flex; align-items: center; gap: 9px; color: #d8bf82; font-size: 11px; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; }
+    .eyebrow { display: flex; align-items: center; gap: 9px; color: #bdc6a3; font-size: 11px; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; }
     .leaf { width: 21px; height: 21px; }
     h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(48px, 6.8vw, 77px); line-height: 1.02; letter-spacing: -.045em; margin: 27px 0 23px; }
-    h1 span { display: block; color: #efd18e; font-style: italic; }
-    .description { color: #c4b79b; line-height: 1.85; font-size: 16px; max-width: 340px; }
+    h1 span { display: block; color: #d5dbb7; font-style: italic; }
+    .description { color: #b8bfa8; line-height: 1.85; font-size: 16px; max-width: 340px; }
     .details { display: flex; gap: 8px; flex-wrap: wrap; margin: 26px 0 34px; }
-    .details span { border: 1px solid #f1d69b25; border-radius: 20px; padding: 7px 11px; font-size: 11px; color: #dacaaa; background: #ffe2a305; }
+    .details span { border: 1px solid #d9e0bc25; border-radius: 20px; padding: 7px 11px; font-size: 11px; color: #cfd5bf; background: #dce3c605; }
     .actions { display: grid; gap: 11px; max-width: 320px; }
     button, .download { width: 100%; border-radius: 9px; padding: 16px 20px; display: flex; align-items: center; justify-content: center; gap: 10px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background .2s; }
-    button { border: 0; color: #352918; background: #eed397; }
-    button:hover { background: #ffe9b8; }
-    .download { border: 1px solid #ffe0a635; color: #f6e7c4; background: #ffdda904; }
-    .download:hover { background: #ffe0a510; }
+    button { border: 0; color: #273023; background: #d6dfb8; }
+    button:hover { background: #eaf1d5; }
+    .download { border: 1px solid #dce6c535; color: #e9edde; background: #d7e8bd04; }
+    .download:hover { background: #d7e8bd10; }
     button:focus-visible, a:focus-visible { outline: 3px solid #f0d991; outline-offset: 4px; }
     .icon { width: 18px; height: 18px; flex-shrink: 0; }
-    .file-note { font-size: 11px; color: #a7977a; margin: 12px 0 0; text-align: center; max-width: 320px; }
-    .screen { border-radius: 17px; background: #231f15; box-shadow: 0 24px 80px #140f0899, 0 0 0 1px #ffdfab2b; overflow: hidden; }
-    video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: contain; background: #231f15; }
-    .caption { text-align: center; font-size: 10px; color: #b09a76; letter-spacing: .02em; margin: 15px 0 0; }
-    #status { min-height: 1.5em; color: #d9c5a4; font-size: 12px; margin-top: 15px; max-width: 340px; }
-    .other { display: inline-flex; align-items: center; gap: 9px; color: #c2a77b; font-size: 12px; text-decoration: none; margin-top: 24px; padding: 7px 0; }
-    .other:hover { color: #fff0d1; }
+    .file-note { font-size: 11px; color: #929d84; margin: 12px 0 0; text-align: center; max-width: 320px; }
+    .screen { border-radius: 17px; background: #1b2118; box-shadow: 0 24px 80px #0c170c99, 0 0 0 1px #dfebc12b; overflow: hidden; }
+    video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: contain; background: #1b2118; }
+    .caption { text-align: center; font-size: 10px; color: #9ca88b; letter-spacing: .02em; margin: 15px 0 0; }
+    #status { min-height: 1.5em; color: #c9d2b8; font-size: 12px; margin-top: 15px; max-width: 340px; }
+    .other { display: inline-flex; align-items: center; gap: 9px; color: #a7b78f; font-size: 12px; text-decoration: none; margin-top: 24px; padding: 7px 0; }
+    .other:hover { color: #e8efda; }
     @media (max-width: 700px) {
       main { padding: 24px 20px 32px; display: flex; flex-direction: column; gap: 22px; max-width: 460px; }
       .intro { width: 100%; }
@@ -56,35 +56,35 @@
     <section class="intro" aria-labelledby="title">
       <div class="eyebrow">
         <svg class="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19C1 8 11 3 21 3c0 10-5 18-14 14M4 21 16 9"/></svg>
-        Pollito comiendo · 30 segundos
+        Jirafa bebé · 30 segundos
       </div>
-      <h1 id="title">Un pequeño <span>banquete.</span></h1>
-      <p class="description">Un pollito esponjoso, un poquito de sol y semillas para desayunar. Un pequeño momento de ternura en su corral.</p>
-      <div class="details"><span>Full HD · Vertical</span><span>Sonido de corral</span><span>Sin voz ni texto</span></div>
+      <h1 id="title">Pequeña <span>jirafa.</span></h1>
+      <p class="description">Una cría de jirafa masticando hojas de acacia, con la calma de la sabana. Un solo plano, detalle fotográfico y movimientos suaves.</p>
+      <div class="details"><span>Full HD · Vertical</span><span>Aspecto fotográfico</span><span>Plano fijo</span></div>
       <div class="actions">
         <button id="play" type="button">
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15L20 12 7 4.5Z"/></svg>
           <span id="play-label">Ver con sonido</span>
         </button>
-        <a class="download" href="/chick/download" download="pollito-comiendo.mp4">
+        <a class="download" href="/giraffe/download" download="jirafa-bebe.mp4">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>
           Descargar video
         </a>
       </div>
       <p class="file-note">Archivo MP4 · 1080 × 1920 · 30 segundos</p>
       <p id="status" role="status" aria-live="polite"></p>
-      <a class="other" href="/jirafa">Ver la jirafa bebé <span aria-hidden="true">↗</span></a><br>
+      <a class="other" href="/pollito">Ver el pollito comiendo <span aria-hidden="true">↗</span></a><br>
       <a class="other" href="/hipopotamo">Ver también el hipopótamo bebé <span aria-hidden="true">↗</span></a><br>
       <a class="other" href="/universo" style="margin-top:0">El viaje por el universo <span aria-hidden="true">↗</span></a>
     </section>
-    <section class="film" aria-label="Reproductor del pollito comiendo">
+    <section class="film" aria-label="Reproductor de la jirafa bebé">
       <div class="screen">
-        <video id="video" controls playsinline loop autoplay muted preload="metadata" poster="/chick/poster.jpg" aria-label="Animación de un pollito picoteando semillas en un corral con hierba">
-          <source src="/chick/video.mp4" type="video/mp4">
-          Tu navegador no puede reproducir el video. <a href="/chick/download">Descárgalo aquí.</a>
+        <video id="video" controls playsinline loop autoplay muted preload="metadata" poster="/giraffe/poster.jpg" aria-label="Animación realista de una jirafa bebé masticando hojas de acacia">
+          <source src="/giraffe/video.mp4" type="video/mp4">
+          Tu navegador no puede reproducir el video. <a href="/giraffe/download">Descárgalo aquí.</a>
         </video>
       </div>
-      <p class="caption">Animación a partir de imágenes generadas con IA · Sonido original</p>
+      <p class="caption">Animación fotográfica con IA · No es una grabación real</p>
     </section>
   </main>
   <script>
@@ -103,7 +103,7 @@
         video.muted = false;
         try {
           await video.play(); status.textContent = '';
-          if (window.innerWidth <= 700) video.scrollIntoView({ behavior: reduceMotion ? 'instant' : 'smooth', block: 'center' });
+          if (window.innerWidth <= 700) video.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
         } catch { status.textContent = 'Pulsa ▶ en el reproductor o descarga el MP4.'; }
       }
       update();
