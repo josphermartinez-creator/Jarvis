@@ -42,7 +42,22 @@ class PlayerTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertIn('text/html', headers['Content-Type'])
         self.assertIn(b'<video ', body)
+        self.assertIn(b'href="/chick/download"', body)
+
+    def test_previous_hippo_player_remains_available(self):
+        status, headers, body = self.request('/hipopotamo')
+        self.assertEqual(status, 200)
         self.assertIn(b'href="/hippo/download"', body)
+
+    @unittest.skipUnless((ROOT / 'exports/pollito-comiendo.mp4').is_file(), 'Render the chick video first')
+    def test_chick_range_and_download(self):
+        status, headers, body = self.request('/chick/video.mp4', headers={'Range': 'bytes=0-31'})
+        self.assertEqual(status, 206)
+        self.assertEqual(len(body), 32)
+        self.assertEqual(body[4:8], b'ftyp')
+        status, headers, body = self.request('/chick/download', 'HEAD')
+        self.assertEqual(status, 200)
+        self.assertIn('pollito-comiendo.mp4', headers['Content-Disposition'])
 
     def test_previous_space_player_remains_available(self):
         status, headers, body = self.request('/universo')

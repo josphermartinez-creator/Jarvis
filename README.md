@@ -1,5 +1,27 @@
 # Jarvis
 
+## Pollito comiendo — Un pequeño banquete
+
+**[Descargar el video de 30 segundos](https://github.com/josphermartinez-creator/Jarvis/raw/refs/heads/arena/01a0c9ee-jarvis/exports/pollito-comiendo.mp4)**
+
+Un pollito amarillo muy tierno picotea semillas en un corral con pasto, tréboles y luz cálida de la mañana. **1080 × 1920, 30 fps, 30 segundos**, sin texto ni voz, con ambiente suave de corral y pequeños piídos originales.
+
+Es una **animación 2.5D con imágenes generadas con IA**, no una grabación de un animal real. Dos poses de alimentación se interpolan mediante flujo óptico para animar la bajada de la cabeza, el contacto del pico con las semillas y su levantamiento. Se añaden la recogida de granitos, el gesto de tragarlos, parpadeos, respiración, pequeños movimientos de plumas y pasto, y un acercamiento continuo de cámara.
+
+- Video: `exports/pollito-comiendo.mp4`.
+- Portada: `exports/pollito-comiendo.jpg`.
+- Imágenes de origen: `assets/chick/`.
+- Código: `render_chick.py`.
+- Las poses intermedias se calculan y guardan de forma atómica en `.cache/chick/`, fuera de Git.
+
+```bash
+.venv/bin/python render_chick.py --preview
+.venv/bin/python render_chick.py
+```
+
+La página principal y `/pollito` abren el reproductor del pollito. El MP4 se reproduce en `/chick/video.mp4` y se descarga en `/chick/download`. Los videos anteriores siguen disponibles en `/hipopotamo` y `/universo`.
+
+
 ## Hipopótamo bebé — Pequeño del río
 
 **[Descargar el video de 30 segundos](https://github.com/josphermartinez-creator/Jarvis/raw/refs/heads/arena/01a0c9ee-jarvis/exports/hipopotamo-bebe.mp4)**
@@ -20,7 +42,7 @@ Con las dependencias instaladas según las instrucciones de abajo:
 .venv/bin/python render_hippo.py
 ```
 
-El reproductor web abre este video de forma predeterminada. La ruta `/hipopotamo` muestra el hipopótamo y `/universo` conserva el video espacial anterior. Ambos tienen reproducción y descarga; el MP4 del hipopótamo se sirve en `/hippo/video.mp4` y se descarga en `/hippo/download`.
+La ruta `/hipopotamo` muestra el hipopótamo y `/universo` conserva el video espacial anterior. Ambos tienen reproducción y descarga; el MP4 del hipopótamo se sirve en `/hippo/video.mp4` y se descarga en `/hippo/download`.
 
 ## Viaje infinito — video de 30 segundos
 
