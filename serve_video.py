@@ -13,8 +13,13 @@ from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parent
 ROUTES = {
-    "/": ("web/index.html", "text/html; charset=utf-8"),
-    "/index.html": ("web/index.html", "text/html; charset=utf-8"),
+    "/": ("web/hippo.html", "text/html; charset=utf-8"),
+    "/index.html": ("web/hippo.html", "text/html; charset=utf-8"),
+    "/hipopotamo": ("web/hippo.html", "text/html; charset=utf-8"),
+    "/hippo/video.mp4": ("exports/hipopotamo-bebe.mp4", "video/mp4"),
+    "/hippo/download": ("exports/hipopotamo-bebe.mp4", "video/mp4"),
+    "/hippo/poster.jpg": ("exports/hipopotamo-bebe.jpg", "image/jpeg"),
+    "/universo": ("web/index.html", "text/html; charset=utf-8"),
     "/video.mp4": ("exports/viaje-infinito.mp4", "video/mp4"),
     "/download": ("exports/viaje-infinito.mp4", "video/mp4"),
     "/poster.jpg": ("exports/viaje-infinito.jpg", "image/jpeg"),
@@ -72,8 +77,8 @@ class VideoHandler(BaseHTTPRequestHandler):
         self.send_header("Cache-Control", "no-cache" if media_type.startswith("text/") else "public, max-age=3600")
         if range_header:
             self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
-        if route == "/download":
-            self.send_header("Content-Disposition", 'attachment; filename="viaje-infinito.mp4"')
+        if route == "/download" or route.endswith("/download"):
+            self.send_header("Content-Disposition", f'attachment; filename="{path.name}"')
         self.end_headers()
         if not body:
             return

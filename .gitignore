@@ -6,3 +6,5 @@ __pycache__/
 exports/*
 !exports/viaje-infinito.mp4
 !exports/viaje-infinito.jpg
+!exports/hipopotamo-bebe.mp4
+!exports/hipopotamo-bebe.jpg

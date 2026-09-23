@@ -1,5 +1,27 @@
 # Jarvis
 
+## Hipopótamo bebé — Pequeño del río
+
+**[Descargar el video de 30 segundos](https://github.com/josphermartinez-creator/Jarvis/raw/refs/heads/arena/01a0c9ee-jarvis/exports/hipopotamo-bebe.mp4)**
+
+Un hipopótamo bebé muy tierno en la orilla de un río africano al amanecer. Tres tomas: cuerpo entero, retrato cercano y descanso en el agua. **1080 × 1920, 30 fps, 30 segundos**, sin texto ni voz y con un ambiente sonoro de río creado para esta pieza.
+
+Es una **animación 2.5D a partir de imágenes generadas con IA**, no una grabación de un animal real. Incluye parpadeos con máscaras de párpados, respiración, inclinación suave de la cabeza, pequeños movimientos de orejas, refracción del agua, ondas y movimientos de cámara. No utiliza un modelo de generación directa de video.
+
+- Video: `exports/hipopotamo-bebe.mp4`.
+- Portada: `exports/hipopotamo-bebe.jpg`.
+- Imágenes originales: `assets/hippo/`.
+- Código de animación y sonido: `render_hippo.py`.
+
+Con las dependencias instaladas según las instrucciones de abajo:
+
+```bash
+.venv/bin/python render_hippo.py --preview
+.venv/bin/python render_hippo.py
+```
+
+El reproductor web abre este video de forma predeterminada. La ruta `/hipopotamo` muestra el hipopótamo y `/universo` conserva el video espacial anterior. Ambos tienen reproducción y descarga; el MP4 del hipopótamo se sirve en `/hippo/video.mp4` y se descarga en `/hippo/download`.
+
 ## Viaje infinito — video de 30 segundos
 
 Animación de un viaje continuo por un universo imaginario: estrellas con movimiento en perspectiva, cinco planetas, anillos, galaxias y nubes de gas. Formato vertical **1080 × 1920**, **30 fps**, sin texto, con ambiente sonoro original.
