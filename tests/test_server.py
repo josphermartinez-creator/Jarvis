@@ -42,7 +42,22 @@ class PlayerTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertIn('text/html', headers['Content-Type'])
         self.assertIn(b'<video ', body)
+        self.assertIn(b'href="/stickmen/download"', body)
+
+    def test_giraffe_player_still_available(self):
+        status, headers, body = self.request('/jirafa')
+        self.assertEqual(status, 200)
         self.assertIn(b'href="/giraffe/download"', body)
+
+    @unittest.skipUnless((ROOT / 'exports/palitos-artes-marciales.mp4').is_file(), 'Render the stickmen video first')
+    def test_stickmen_range_and_download(self):
+        status, headers, body = self.request('/stickmen/video.mp4', headers={'Range': 'bytes=0-31'})
+        self.assertEqual(status, 206)
+        self.assertEqual(len(body), 32)
+        self.assertEqual(body[4:8], b'ftyp')
+        status, headers, body = self.request('/stickmen/download', 'HEAD')
+        self.assertEqual(status, 200)
+        self.assertIn('palitos-artes-marciales.mp4', headers['Content-Disposition'])
 
     def test_previous_chick_player_remains_available(self):
         status, headers, body = self.request('/pollito')

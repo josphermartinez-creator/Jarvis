@@ -3,35 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#17271f">
-  <title>Hipopótamo bebé · Ver y descargar</title>
+  <meta name="theme-color" content="#1e2328">
+  <title>Palitos artes marciales · Ver y descargar</title>
   <style>
-    :root { color-scheme: dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #17271f; color: #f7f2e6; }
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #1e2328; color: #e9eef2; }
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100svh; background: radial-gradient(ellipse at 12% 10%, #51633d45, transparent 54%), radial-gradient(ellipse at 82% 94%, #72714728, transparent 56%), #17271f; }
+    body { margin: 0; min-height: 100svh; background: radial-gradient(ellipse at 12% 10%, #2a7fff22, transparent 54%), radial-gradient(ellipse at 82% 94%, #ff3b3022, transparent 56%), #1e2328; }
     main { min-height: 100svh; max-width: 1090px; padding: 40px 36px; margin: auto; display: grid; grid-template-columns: 1fr minmax(240px, 375px); align-items: center; gap: 74px; }
-    .eyebrow { display: flex; align-items: center; gap: 9px; color: #c9ceaa; font-size: 11px; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; }
+    .eyebrow { display: flex; align-items: center; gap: 9px; color: #9ab4d0; font-size: 11px; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; }
     .leaf { width: 21px; height: 21px; }
     h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(48px, 6.8vw, 77px); line-height: 1.02; letter-spacing: -.045em; margin: 27px 0 23px; }
-    h1 span { display: block; color: #d9deb5; font-style: italic; }
-    .description { color: #b8c2b4; line-height: 1.85; font-size: 16px; max-width: 340px; }
+    h1 span { display: block; color: #7fb0ff; font-style: italic; }
+    h1 span:last-child { color: #ff8a80; }
+    .description { color: #b8c6d4; line-height: 1.85; font-size: 16px; max-width: 360px; }
     .details { display: flex; gap: 8px; flex-wrap: wrap; margin: 26px 0 34px; }
-    .details span { border: 1px solid #edf3cb25; border-radius: 20px; padding: 7px 11px; font-size: 11px; color: #d0d6c3; background: #f5f4d704; }
+    .details span { border: 1px solid #7fb0ff25; border-radius: 20px; padding: 7px 11px; font-size: 11px; color: #c2d4e6; background: #7fb0ff08; }
     .actions { display: grid; gap: 11px; max-width: 320px; }
     button, .download { width: 100%; border-radius: 9px; padding: 16px 20px; display: flex; align-items: center; justify-content: center; gap: 10px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background .2s; }
-    button { border: 0; color: #1d3024; background: #dce3bc; }
-    button:hover { background: #eef2d4; }
-    .download { border: 1px solid #f1f1cc35; color: #eeeeda; background: #f7fbd304; }
-    .download:hover { background: #f5ffd010; }
-    button:focus-visible, a:focus-visible { outline: 3px solid #f0d991; outline-offset: 4px; }
+    button { border: 0; color: #111a26; background: #7fb0ff; }
+    button:hover { background: #a8ccff; }
+    .download { border: 1px solid #ff8a8035; color: #ffd8d3; background: #ff3b300a; }
+    .download:hover { background: #ff3b3015; }
+    button:focus-visible, a:focus-visible { outline: 3px solid #7fb0ff; outline-offset: 4px; }
     .icon { width: 18px; height: 18px; flex-shrink: 0; }
-    .file-note { font-size: 11px; color: #93a18d; margin: 12px 0 0; text-align: center; max-width: 320px; }
-    .screen { border-radius: 17px; background: #132219; box-shadow: 0 24px 80px #08180f99, 0 0 0 1px #edf1cb2b; overflow: hidden; }
-    video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: contain; background: #132219; }
-    .caption { text-align: center; font-size: 10px; color: #9aaa92; letter-spacing: .02em; margin: 15px 0 0; }
-    #status { min-height: 1.5em; color: #c7d1b7; font-size: 12px; margin-top: 15px; max-width: 340px; }
-    .other { display: inline-flex; align-items: center; gap: 9px; color: #a8b69b; font-size: 12px; text-decoration: none; margin-top: 24px; padding: 7px 0; }
-    .other:hover { color: #eef0d9; }
+    .file-note { font-size: 11px; color: #8a9bb0; margin: 12px 0 0; text-align: center; max-width: 320px; }
+    .screen { border-radius: 17px; background: #151a1f; box-shadow: 0 24px 80px #0a0f1499, 0 0 0 1px #7fb0ff2b; overflow: hidden; }
+    video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: contain; background: #e8e5d8; }
+    .caption { text-align: center; font-size: 10px; color: #8fa6bd; letter-spacing: .02em; margin: 15px 0 0; }
+    #status { min-height: 1.5em; color: #b8c6d4; font-size: 12px; margin-top: 15px; max-width: 340px; }
+    .other { display: inline-flex; align-items: center; gap: 9px; color: #8fb4ff; font-size: 12px; text-decoration: none; margin-top: 24px; padding: 7px 0; }
+    .other:hover { color: #d0e2ff; }
     @media (max-width: 700px) {
       main { padding: 24px 20px 32px; display: flex; flex-direction: column; gap: 22px; max-width: 460px; }
       .intro { width: 100%; }
@@ -55,37 +56,37 @@
   <main>
     <section class="intro" aria-labelledby="title">
       <div class="eyebrow">
-        <svg class="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19C1 8 11 3 21 3c0 10-5 18-14 14M4 21 16 9"/></svg>
-        Hipopótamo bebé · 30 segundos
+        <svg class="leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        Palitos · 30 segundos · Artes marciales
       </div>
-      <h1 id="title">Pequeño <span>del río.</span></h1>
-      <p class="description">Una carita curiosa, orejitas suaves y toda la calma de su hogar. Un pequeño momento de ternura a la orilla del río.</p>
-      <div class="details"><span>Full HD · Vertical</span><span>Ambiente de río</span><span>Sin voz ni texto</span></div>
+      <h1 id="title">Dos <span>palitos</span> <span>practicando.</span></h1>
+      <p class="description">Dos muñecos de palitos, azul y rojo, entrenan juntos: jabs, patadas frontales, ganchos, bloqueos, esquivas y patadas altas. Sin sangre, solo práctica amistosa.</p>
+      <div class="details"><span>Full HD · Vertical</span><span>Azul vs Rojo</span><span>Sin sangre</span></div>
       <div class="actions">
         <button id="play" type="button">
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15L20 12 7 4.5Z"/></svg>
           <span id="play-label">Ver con sonido</span>
         </button>
-        <a class="download" href="/hippo/download" download="hipopotamo-bebe.mp4">
+        <a class="download" href="/stickmen/download" download="palitos-artes-marciales.mp4">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>
           Descargar video
         </a>
       </div>
       <p class="file-note">Archivo MP4 · 1080 × 1920 · 30 segundos</p>
       <p id="status" role="status" aria-live="polite"></p>
-      <a class="other" href="/palitos">Ver palitos artes marciales <span aria-hidden="true">↗</span></a><br>
       <a class="other" href="/jirafa">Ver la jirafa bebé <span aria-hidden="true">↗</span></a><br>
       <a class="other" href="/pollito">Ver el pollito comiendo <span aria-hidden="true">↗</span></a><br>
-      <a class="other" href="/universo">Ver también el viaje por el universo <span aria-hidden="true">↗</span></a>
+      <a class="other" href="/hipopotamo">Ver el hipopótamo bebé <span aria-hidden="true">↗</span></a><br>
+      <a class="other" href="/universo" style="margin-top:0">El viaje por el universo <span aria-hidden="true">↗</span></a>
     </section>
-    <section class="film" aria-label="Reproductor del hipopótamo bebé">
+    <section class="film" aria-label="Reproductor de palitos artes marciales">
       <div class="screen">
-        <video id="video" controls playsinline loop autoplay muted preload="metadata" poster="/hippo/poster.jpg" aria-label="Animación de un hipopótamo bebé en un río al amanecer">
-          <source src="/hippo/video.mp4" type="video/mp4">
-          Tu navegador no puede reproducir el video. <a href="/hippo/download">Descárgalo aquí.</a>
+        <video id="video" controls playsinline loop autoplay muted preload="metadata" poster="/stickmen/poster.jpg" aria-label="Animación de dos muñecos de palitos azul y rojo practicando artes marciales">
+          <source src="/stickmen/video.mp4" type="video/mp4">
+          Tu navegador no puede reproducir el video. <a href="/stickmen/download">Descárgalo aquí.</a>
         </video>
       </div>
-      <p class="caption">Animación a partir de imágenes generadas con IA · Sonido original</p>
+      <p class="caption">Animación procedural · Sin sangre · Práctica amistosa</p>
     </section>
   </main>
   <script>
@@ -104,7 +105,7 @@
         video.muted = false;
         try {
           await video.play(); status.textContent = '';
-          if (window.innerWidth <= 700) video.scrollIntoView({ behavior: reduceMotion ? 'instant' : 'smooth', block: 'center' });
+          if (window.innerWidth <= 700) video.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
         } catch { status.textContent = 'Pulsa ▶ en el reproductor o descarga el MP4.'; }
       }
       update();

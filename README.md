@@ -1,5 +1,26 @@
 # Jarvis
 
+## Palitos artes marciales — Azul vs Rojo
+
+**[Descargar el video de 30 segundos](https://github.com/josphermartinez-creator/Jarvis/raw/refs/heads/arena/01a0c9ee-jarvis/exports/palitos-artes-marciales.mp4)**
+
+Dos muñecos de palitos, **azul y rojo**, practican artes marciales de forma amistosa. **1080 × 1920, 30 fps, 30 segundos**, sin sangre, sin texto ni voz. Incluye jabs, cruces, ganchos, patadas frontales, laterales, circulares y altas, bloqueos, esquivas, salto para evitar barrido y efectos de impacto con leve temblor de cámara.
+
+Es una **animación procedural con cinemática inversa de 2 huesos**, no una captura ni un modelo de video generativo. Cada extremidad se dibuja con contorno negro y relleno de color para que se distinga en vertical.
+
+- Video: `exports/palitos-artes-marciales.mp4`.
+- Portada: `exports/palitos-artes-marciales.jpg`.
+- Código: `render_stickmen.py`.
+- Audio de dojo sintetizado (whoosh y golpes suaves): `.cache/stickmen/`.
+
+```bash
+.venv/bin/python render_stickmen.py --preview
+.venv/bin/python render_stickmen.py
+```
+
+La página principal, `/palitos` y `/stickmen` abren este reproductor. El MP4 se sirve en `/stickmen/video.mp4` y se descarga en `/stickmen/download`. Los videos anteriores siguen en `/jirafa`, `/pollito`, `/hipopotamo` y `/universo`.
+
+
 ## Jirafa bebé — Hojas de acacia
 
 **[Descargar el video de 30 segundos](https://github.com/josphermartinez-creator/Jarvis/raw/refs/heads/arena/01a0c9ee-jarvis/exports/jirafa-bebe.mp4)**
